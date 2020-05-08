@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-drop table payroll;
+DROP TABLE IF EXISTS payroll;
 
 CREATE TABLE payroll
 (
