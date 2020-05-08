@@ -11,13 +11,15 @@
 	</parent>
 	<groupId>io.spring</groupId>
 	<artifactId>onboarding</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>onboarding</name>
 	<description>Onboard new people into payroll system</description>
 
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Hoxton.SR4</spring-cloud.version>
+		<docker.image.prefix>cppwfs</docker.image.prefix>
+		<dockerfile-maven-plugin.version>1.3.6</dockerfile-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -85,6 +87,19 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>${dockerfile-maven-plugin.version}</version>
+				<configuration>
+					<repository>${docker.image.prefix}/onboarding</repository>
+					<tag>${project.version}</tag>
+					<tag>1.0.0-SNAPSHOT</tag>
+					<buildArgs>
+						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,0 +1,32 @@
+---
+apiVersion: "argoproj.io/v1alpha1"
+kind: "Workflow"
+metadata:
+  generateName: "onboarding-process-"
+spec:
+  entrypoint: "composed-task"
+  templates:
+  - name: "composed-task"
+    dag:
+      tasks:
+      - name: "ts1"
+        template: "onboard"
+      - name: "ts2"
+        dependencies: [ts1]
+        template: "payroll"
+  - name: "onboard"
+    container:
+      args:
+      - "--spring.datasource.driverClassName=org.mariadb.jdbc.Driver"
+      - "--spring.datasource.username=root"
+      - "--spring.datasource.url=jdbc:myloc"
+      - "--spring.datasource.password=yourpassword"
+      image: "cppwfs/onboarding:1.0.0-SNAPSHOT"
+  - name: "payroll"
+    container:
+      args:
+      - "--spring.datasource.driverClassName=org.mariadb.jdbc.Driver"
+      - "--spring.datasource.username=root"
+      - "--spring.datasource.url=jdbc:myloc:
+      - "--spring.datasource.password=yourpassword"
+      image: "cppwfs/payroll:1.0.0-SNAPSHOT"
