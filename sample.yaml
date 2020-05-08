@@ -1,0 +1,30 @@
+---
+apiVersion: "argoproj.io/v1alpha1"
+kind: "Workflow"
+metadata:
+  generateName: "simpleflow-"
+spec:
+  entrypoint: "composed-task"
+  templates:
+  - name: "composed-task"
+    dag:
+      tasks:
+      - name: "ts1"
+        template: "timestamp0"
+      - name: "ts2"
+        template: "timestamp"
+      - name: "ts3"
+        template: "timestamp"
+      - name: "ts4"
+        dependencies: [ts1, ts2, ts3]
+        template: "timestamp"
+  - name: "timestamp0"
+    container:
+      args:
+      - "--timestamp.format=YYYY"
+      image: "springcloudtask/timestamp-task:2.1.0.RELEASE"
+  - name: "timestamp"
+    container:
+      args:
+      - "--timestamp.format=YYYY"
+      image: "springcloudtask/timestamp-task:2.1.0.RELEASE"
